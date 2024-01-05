@@ -1,11 +1,10 @@
-package org.example;
+package org.example.golangmock;
 
+import org.example.Mocks;
 import org.example.commandsdocs.CommandDocs;
 import org.example.exceptions.ReadDataException;
-import org.example.javamock.JavaMock;
-import redis.clients.jedis.resps.CommandDocument;
-import redis.clients.jedis.resps.CommandInfo;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,57 +12,32 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class RedisExecute extends Mocks{
+public class GolangMockExecute extends Mocks {
 
-    public RedisExecute() {
+//    protected final static int PORT = 40150;
+
+    public GolangMockExecute() {
         super();
-//        port = 6379;
-        port = 40150;
-        mockName = "Redis";
-        try {
-            javaMock = new JavaMock(port);
-            System.out.println("Start on real Redis...");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        System.out.println("Start on golang Redis...");
+        port = 40155;
+        mockName = "Golang";
     }
 
-    public Map<String, CommandInfo> getCommandsInfos(List<String> listOfCommands) {
-        Map<String, CommandInfo> result = new HashMap<>();
+    public List<CommandDocs> getCommandsDocs(List<String> listOfCommands) throws IOException {
+        List<CommandDocs> result = new ArrayList<>();
         for (String commandName : listOfCommands) {
-            try {
-                Map<String, CommandInfo> commandInfoMap = javaMock.getClient().commandInfo(commandName);
-                result.putAll(commandInfoMap);
-            } catch (ClassCastException e) {
-                System.out.println("Не могу прочитать информацию о: " + commandName);
-            }
-        }
-        return result;
-    }
+            try (Socket clientSocket = new Socket("localhost", port)) {
+                InputStream inputStream = clientSocket.getInputStream();
+                OutputStream outputStream = clientSocket.getOutputStream();
 
-    public Map<String, CommandDocument> getCommandsDocs(List<String> listOfCommands) throws IOException {
-        Map<String, CommandDocument> result = new HashMap<>();
-        for (String commandName : listOfCommands) {
-            Map<String, CommandDocument> commandDocumentMap = javaMock.getClient().commandDocs(commandName);
-            result.putAll(commandDocumentMap);
-        }
-        return result;
-//        List<CommandDocs> result = new ArrayList<>();
-//        for (String commandName : listOfCommands) {
-//            try (Socket clientSocket = new Socket("localhost", port)) {
-//                InputStream inputStream = clientSocket.getInputStream();
-//                OutputStream outputStream = clientSocket.getOutputStream();
-//
-//                String word = "command docs " + commandName + "\n";
-//                outputStream.write(word.getBytes());
-//
-//                CommandDocs commandDocs = new CommandDocs(inputStream);
-//                commandDocs.readCommandDocsFromInputStream();
-//                result.add(commandDocs);
+                String word = "command docs " + commandName + "\n";
+                outputStream.write(word.getBytes());
+
+                CommandDocs commandDocs = new CommandDocs(inputStream);
+                commandDocs.readCommandDocsFromInputStream();
+                result.add(commandDocs);
 
                 // если надо записать в файл
 //                try (FileWriter writer = new FileWriter("read_command.txt", true)) {
@@ -74,11 +48,12 @@ public class RedisExecute extends Mocks{
 //                } catch (IOException e) {
 //                    e.printStackTrace();
 //                }
-//            }
-//        }
-//        return result;
+            }
+        }
+        return result;
 //        System.out.println("Считано данных о " + commandInfos.size() + " командах Редиса...");
     }
+
 
     public List<String> getListOfCommands() throws IOException {
         List<String> redisCommandsName = new ArrayList<>();

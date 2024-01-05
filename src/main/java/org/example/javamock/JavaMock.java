@@ -1,13 +1,10 @@
 package org.example.javamock;
 
-import com.github.fppt.jedismock.RedisServer;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.args.Rawable;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.InetAddress;
 
 public class JavaMock {
     private Jedis jedis;

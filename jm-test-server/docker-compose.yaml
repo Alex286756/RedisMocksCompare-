@@ -1,7 +1,0 @@
-version: '3.0'
-
-services:
-  backend:
-    ports:
-      - "40152:39807"
-    build: .

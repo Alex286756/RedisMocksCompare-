@@ -16,10 +16,15 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.github.fppt</groupId>
-      <artifactId>jedis-mock</artifactId>
-      <version>1.0.13</version>
+      <groupId>redis.clients</groupId>
+      <artifactId>jedis</artifactId>
+      <version>5.1.0</version>
     </dependency>
+<!--    <dependency>-->
+<!--      <groupId>com.github.fppt</groupId>-->
+<!--      <artifactId>jedis-mock</artifactId>-->
+<!--      <version>1.0.13</version>-->
+<!--    </dependency>-->
     <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
