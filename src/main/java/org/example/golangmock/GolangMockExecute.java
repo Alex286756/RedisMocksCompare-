@@ -20,9 +20,30 @@ public class GolangMockExecute extends Mocks {
 
     public GolangMockExecute() {
         super();
-        System.out.println("Start on golang Redis...");
-        port = 40155;
+        System.out.println("Start on Golang...");
+        port = 40154;
         mockName = "Golang";
+    }
+
+    public void getGoCommandRunResult(String command) throws IOException {
+        String response = "";
+        try (Socket clientSocket = new Socket("localhost", port)) {
+            InputStream inputStream = clientSocket.getInputStream();
+            OutputStream outputStream = clientSocket.getOutputStream();
+
+            String word = command;
+//            String word = command + "\n";
+            outputStream.write(word.getBytes());
+
+            try (BufferedReader bf = new BufferedReader(new InputStreamReader(inputStream))) {
+                while (bf.ready() || response.isEmpty()) {
+                    response += bf.readLine();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        System.out.println(mockName + ": " + command + " -> " + response);
     }
 
     public List<CommandDocs> getCommandsDocs(List<String> listOfCommands) throws IOException {

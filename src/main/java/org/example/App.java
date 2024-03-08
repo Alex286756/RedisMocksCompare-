@@ -25,10 +25,10 @@ public class App
         System.out.println( "Start comparing mocks of Redis!" );
         List<String> tests = new ArrayList<>();
         tests.add("ping");
-        tests.add("set asd dsa");
-        tests.add("get asd");
-        tests.add("keys *");
-        tests.add("del asd");
+//        tests.add("set asd dsa");
+//        tests.add("get asd");
+//        tests.add("keys *");
+//        tests.add("del asd");
 //        String testCommand = "ping";
 //        String testCommand = "set asd dsa";
 //        String testCommand = "get asd";
@@ -38,13 +38,13 @@ public class App
         RedisExecute redisExecute = new RedisExecute();
         JavaMockExecute javaMockExecute = new JavaMockExecute();
         PythonMockExecute pythonMockExecute = new PythonMockExecute();
-        GolangMockExecute golangMockExecute = new GolangMockExecute();
+//        GolangMockExecute golangMockExecute = new GolangMockExecute();
 
         for (String testCommand: tests) {
             redisExecute.runCommand(testCommand);
             javaMockExecute.runCommand(testCommand);
             pythonMockExecute.getPyCommandRunResult(testCommand);
-            golangMockExecute.getCommandRunResult(testCommand);
+//            golangMockExecute.getGoCommandRunResult(testCommand);
             System.out.println();
         }
 
